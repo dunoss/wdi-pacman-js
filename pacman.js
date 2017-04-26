@@ -2,11 +2,45 @@
 var score = 0;
 var lives = 2;
 
+var inky = {
+  menu_option: '1',
+  name: 'Inky',
+  colour: 'Red',
+  character: 'Shadow',
+  edible: false
+};
 
-// Define your ghosts here
+var blinky = {
+  menu_option: '2',
+  name: 'Blinky',
+  colour: 'Cyan',
+  character: 'Speedy',
+  edible: false
+};
 
-// replace this comment with your four ghosts setup as objects
+var pinky = {
+  menu_option: '3',
+  name: 'Pinky',
+  colour: 'Pink',
+  character: 'Bashful',
+  edible: false
+};
 
+var clyde = {
+  menu_option: '4',
+  name: 'Clyde',
+  colour: 'Orange',
+  character: 'Pokey',
+  edible: false
+};
+
+var ghosts = [inky, blinky, pinky, clyde];
+
+function eatGhost(ghost) {
+  if (ghost.edible === false) {
+  lives -= 1;
+  }
+}
 
 // Draw the screen functionality
 function drawScreen() {
@@ -29,7 +63,12 @@ function displayStats() {
 function displayMenu() {
   console.log('\n\nSelect Option:\n');  // each \n creates a new line
   console.log('(d) Eat Dot');
+  console.log('(1) Eat Inky');
+  console.log('(2) Eat Blinky');
+  console.log('(3) Eat Pinky');
+  console.log('(4) Eat Clyde');
   console.log('(q) Quit');
+
 }
 
 function displayPrompt() {
@@ -41,6 +80,7 @@ function displayPrompt() {
 // Menu Options
 function eatDot() {
   console.log('\nChomp!');
+  // console.log(inky.edible);
   score += 10;
 }
 
@@ -55,10 +95,24 @@ function processInput(key) {
     case 'd':
       eatDot();
       break;
+    case '1':
+      eatGhost(inky);
+      break;
+    case '2':
+      eatGhost(blinky);
+      break;
+    case '3':
+      eatGhost(pinky);
+      break;
+    case '4':
+      eatGhost(clyde);
+      break;
     default:
       console.log('\nInvalid Command!');
   }
 }
+
+
 
 
 //
