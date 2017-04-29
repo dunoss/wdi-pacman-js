@@ -1,6 +1,7 @@
 // Setup initial game stats
 var score = 0;
 var lives = 2;
+var powerPellets = 4;
 
 var inky = {
   menu_option: '1',
@@ -36,17 +37,13 @@ var clyde = {
 
 var ghosts = [inky, blinky, pinky, clyde];
 
-function eatGhost(ghost) {
-  if (ghost.edible === false) {
-  lives -= 1;
-  }
-}
 
 // Draw the screen functionality
 function drawScreen() {
   clearScreen();
   setTimeout(function() {
     displayStats();
+    displayPowerPellets();
     displayMenu();
     displayPrompt();
   }, 10);
@@ -60,15 +57,37 @@ function displayStats() {
   console.log('Score: ' + score + '     Lives: ' + lives);
 }
 
-function displayMenu() {
-  console.log('\n\nSelect Option:\n');  // each \n creates a new line
-  console.log('(d) Eat Dot');
-  console.log('(1) Eat Inky');
-  console.log('(2) Eat Blinky');
-  console.log('(3) Eat Pinky');
-  console.log('(4) Eat Clyde');
-  console.log('(q) Quit');
+function displayPowerPellets() {
+  console.log('\n\nPower-Pellets: ' + powerPellets +'');
+}
 
+function displayMenu() {
+  console.log('\n\nSelect Option:\n');
+  console.log('(d) Eat Dot');
+  if (powerPellets > 0) {
+    console.log('(p) Eat Power-Pellets');
+  }
+  if (inky.edible === false) {
+    console.log('(1) Eat Inky (inedible)');
+  } else if (inky.edible === true) {
+    console.log('(1) Eat Inky (edible)');
+  }
+  if (blinky.edible === false) {
+    console.log('(2) Eat Blinky (inedible)');
+  } else if (blinky.edible === true) {
+    console.log('(2) Eat Blinky (edible)');
+  }
+  if (pinky.edible === false) {
+    console.log('(3) Eat Pinky (inedible)');
+  } else if (pinky.edible === true) {
+    console.log('(3) Eat Pinky (edible)');
+  }
+  if (clyde.edible === false) {
+    console.log('(4) Eat Clyde (inedible)');
+  } else if (clyde.edible === true) {
+    console.log('(4) Eat Clyde (edible)');
+  }
+  console.log('(q) Quit');
 }
 
 function displayPrompt() {
@@ -84,6 +103,31 @@ function eatDot() {
   score += 10;
 }
 
+function eatGhost(ghost) {
+  if (ghost.edible === false) {
+  lives -= 1;
+  console.log('\nAIYAH! You were killed by ' + ghost.name + ' the ' + ghost.colour + ' ghost');
+} else if (ghost.edible === true) {
+    score += 200;
+    console.log('\nWooo get it girl! You ate ' + ghost.name + ' the ' + ghost.character + ' ghost');
+      pacLives()
+    }
+}
+
+function pacLives() {
+  if (lives < 0) {
+    process.exit();
+  }
+}
+
+function eatPowerPellet() {
+  console.log('\nPOWER PELLET!');
+  score += 50;
+  powerPellets -= 1;
+  ghosts.forEach(function(ghost) {
+  ghost.edible = true;
+})
+}
 
 // Process Player's Input
 function processInput(key) {
@@ -94,6 +138,15 @@ function processInput(key) {
       break;
     case 'd':
       eatDot();
+      break;
+    case 'p':
+      if (powerPellets > 0) {
+        eatPowerPellet();
+      break;
+    } else {
+      console.log('\nNo More Pellets!');
+    };
+      break;
       break;
     case '1':
       eatGhost(inky);
@@ -112,9 +165,6 @@ function processInput(key) {
   }
 }
 
-
-
-
 //
 // YOU PROBABLY DON'T WANT TO CHANGE CODE BELOW THIS LINE
 //
@@ -132,10 +182,10 @@ drawScreen();
 stdin.on('data', function(key) {
   process.stdout.write(key);
   processInput(key);
-  setTimeout(drawScreen, 300); // The command prompt will flash a message for 300 milliseoncds before it re-draws the screen. You can adjust the 300 number to increase this.
+  setTimeout(drawScreen, 600); // The command prompt will flash a message for 300 milliseoncds before it re-draws the screen. You can adjust the 300 number to increase this.
 });
 
 // Player Quits
 process.on('exit', function() {
-  console.log('\n\nGame Over!\n');
+  console.log('\n\nBye Felicia!\n');
 });
